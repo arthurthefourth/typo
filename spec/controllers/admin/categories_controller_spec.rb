@@ -16,6 +16,31 @@ describe Admin::CategoriesController do
     assert_response :redirect, :action => 'index'
   end
 
+  describe "test_new" do
+    before(:each) do
+      get :new
+    end
+
+    it 'should render template new' do
+      assert_template 'new'
+      assert_tag :tag => "table",
+        :attributes => { :id => "category_container" }
+    end
+
+    it 'should have a new category' do
+      assigns(:category).should_not be_nil
+      assigns(:categories).should_not be_nil
+      expect(assigns(:category)).to be_a_new(Category)
+    end
+  end
+
+  it 'test_create' do
+    post :new, category: {
+      name: "My Category", keywords: "keyword1 keyword2", description: "My new category"
+    }
+    assert_equal "My Category", Category.last.name
+  end
+
   describe "test_edit" do
     before(:each) do
       get :edit, :id => Factory(:category).id
@@ -35,8 +60,13 @@ describe Admin::CategoriesController do
   end
 
   it "test_update" do
-    post :edit, :id => Factory(:category).id
+    category = Factory(:category)
+    old_name = category.name
+    post :edit, id: category.id, category: category.attributes.merge(name: 'New name')
     assert_response :redirect, :action => 'index'
+    new_category = Category.find(category.id)
+    assert_equal 'New name', new_category.name
+    assert_equal category.keywords, new_category.keywords
   end
 
   describe "test_destroy with GET" do

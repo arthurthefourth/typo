@@ -55,6 +55,13 @@ And /^I am logged into the admin panel$/ do
   end
 end
 
+And /^I have created category (.*)$/ do |category|
+  fill_in "category_name", with: category
+  fill_in "category_keywords", with: "${category}_keyword1 ${category}_keyword2"
+  fill_in "category_description", with: "This is my new ${category} category"
+  click_button "Save"
+end
+
 # Single-line step scoper
 When /^(.*) within (.*[^:])$/ do |step, parent|
   with_scope(parent) { When step }

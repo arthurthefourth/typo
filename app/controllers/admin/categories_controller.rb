@@ -3,12 +3,10 @@ class Admin::CategoriesController < Admin::BaseController
 
   def index; redirect_to :action => 'new' ; end
   def edit
-    @category = Category.find(params[:id]) unless request.post?
     new_or_edit
   end
 
   def new 
-    @category = Category.new
     respond_to do |format|
       format.html { new_or_edit }
       format.js { @category }
@@ -26,8 +24,15 @@ class Admin::CategoriesController < Admin::BaseController
   private
 
   def new_or_edit
+    case params[:id]
+    when nil
+      @category = Category.new
+    else
+      @category = Category.find(params[:id])
+    end
     @categories = Category.find(:all)
     @category.attributes = params[:category]
+
     if request.post?
       respond_to do |format|
         format.html { save_category }
