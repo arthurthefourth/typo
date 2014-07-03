@@ -116,13 +116,21 @@ class Admin::ContentController < Admin::BaseController
 
   def merge
     @article = Article.find(params[:id])
+    unless current_user.admin?
+      redirect_to :action => 'index'
+      flash[:error] = _("Error, you are not allowed to perform this action")
+      return
+    end
+    
     merge_with = params[:merge_with]
     if @article.merge_with(merge_with)
       flash[:notice] = "Successfully merged articles."
     else
       flash[:error] = "There was a problem merging the two articles."
     end
-    redirect_to :action => 'index'
+    # redirect_to :action => 'edit', :id => params[:id]
+    redirect_to :action => 'new'
+
   end
 
   protected

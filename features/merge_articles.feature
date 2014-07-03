@@ -13,11 +13,11 @@ Feature: Merge Articles
 
   Scenario: Successfully merge articles
     Given I am on the article page for "Foobar"
-    And show me the page
+    # And show me the page
     And I fill in "merge_with" with "3"
     And I press "Merge"
     Then the article "Foobar" should have body "LoremIpsum LoremIpsum 2"
-    And show me the page
+    # And show me the page
 
   Scenario: Non-admin user should not be able to merge
     Given I am on the article page for "Foobar"

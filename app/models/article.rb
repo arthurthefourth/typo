@@ -426,8 +426,11 @@ class Article < Content
       if self.save
         other_article.reload
         other_article.destroy
+        return true
       end
+      return false
     end
+    return false
   end
 
   protected
