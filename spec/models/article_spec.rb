@@ -97,6 +97,23 @@ describe Article do
     assert_equal 1, b.categories.size
   end
 
+  it "test_merge_with" do
+    a = Article.new
+    a.user_id = 1
+    a.body = "Foo"
+    a.title = "Zzz"
+    a.save
+
+    b = Article.new
+    b.user_id = 1
+    b.body = "Bar"
+    b.title = "Zimm"
+    b.save
+
+    a.merge_with(b.id)
+    assert_equal "Foo Bar", a.body
+  end
+
   it "test_permalink_with_title" do
     article = Factory(:article, :permalink => 'article-3', :published_at => Time.utc(2004, 6, 1))
     assert_equal(article,
